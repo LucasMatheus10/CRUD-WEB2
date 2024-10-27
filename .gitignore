@@ -1,0 +1,37 @@
+# Arquivos e pastas de build
+target/
+build/
+.mvn/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Arquivos sensíveis
+src/main/resources/application.properties
+
+# Configurações de IDEs
+
+# Spring Tool Suite (STS)
+.springBeans/
+.sts4-cache/
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Visual Studio Code
+.vscode/
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
