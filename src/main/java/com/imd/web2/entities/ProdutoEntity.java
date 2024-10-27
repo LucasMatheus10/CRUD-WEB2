@@ -14,8 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "produtos")
 public class ProdutoEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
     String nomeProduto;
     String marca;
