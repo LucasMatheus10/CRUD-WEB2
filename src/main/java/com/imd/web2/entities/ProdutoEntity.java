@@ -22,7 +22,7 @@ public class ProdutoEntity {
     String dataValidade;
 
     public enum Genero {
-        COMESTICO,
+        COSMETICO,
         ALIMENTICIO,
         HIGIENE,
         PESSOAL,
