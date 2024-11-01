@@ -1,6 +1,7 @@
 package com.imd.web2.controllers;
 
 import com.imd.web2.DTO.ProdutoDTO;
+import com.imd.web2.entities.ClienteEntity;
 import com.imd.web2.entities.ProdutoEntity;
 import com.imd.web2.repositories.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,19 @@ public class ProdutoController {
         return ResponseEntity.ok().body(produtoRepository.findAll());
     }
 
+    @GetMapping("getAllByAtivo")
+    public ResponseEntity<Object> getAllByAtivo() {
+        return ResponseEntity.ok().body(produtoRepository.findAllByAtivoTrue());
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<Object> getById(@PathVariable Long id) {
         Optional<ProdutoEntity> produto = produtoRepository.findById(id);
         if(produto.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não localizado");
+        }
+        if(!produto.get().getAtivo()){
+            return ResponseEntity.status(HttpStatus.LOCKED).body("Produto não está ativo");
         }
         return ResponseEntity.ok().body(produto.get());
     }
@@ -48,6 +57,10 @@ public class ProdutoController {
 
         if (produtoBase.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
+        }
+
+        if (!produtoBase.get().getAtivo()) {
+            return ResponseEntity.status(HttpStatus.LOCKED).body("Produto não está ativo");
         }
 
         if (produtoAtualizado.getLote() != null && !produtoAtualizado.getLote().equals(produtoBase.get().getLote())) {
@@ -78,6 +91,19 @@ public class ProdutoController {
         if (produtoRepository.existsById(id)) {
             produtoRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não localizado");
+        }
+    }
+
+    @PutMapping("deleteLogic/{id}")
+    public ResponseEntity<Object> deleteLogic(@PathVariable Long id) {
+        Optional<ProdutoEntity> produto;
+        if (produtoRepository.existsById(id)) {
+            produto = produtoRepository.findById(id);
+            produto.get().desativar();
+            produtoRepository.save(produto.get());
+            return ResponseEntity.ok().body(produto.get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não localizado");
         }

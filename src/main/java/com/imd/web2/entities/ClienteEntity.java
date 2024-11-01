@@ -24,12 +24,22 @@ public class ClienteEntity {
     }
     Genero genero;
     String dataNascimento;
+    Boolean ativo = true;
+
 
     public ClienteEntity(ClienteDTO clienteDTO) {
         this.nome = clienteDTO.nome();
         this.cpf = clienteDTO.cpf();
         this.genero = clienteDTO.genero();
         this.dataNascimento = clienteDTO.dataNascimento();
+    }
+
+    public void desativar() {
+        this.ativo = false;
+    }
+
+    public void ativar() {
+        this.ativo = true;
     }
 
 }

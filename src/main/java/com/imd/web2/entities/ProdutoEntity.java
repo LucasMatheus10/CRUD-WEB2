@@ -31,6 +31,7 @@ public class ProdutoEntity {
 
     Genero genero;
     String lote;
+    Boolean ativo = true;
 
     public ProdutoEntity(ProdutoDTO produtoDTO) {
         this.nomeProduto = produtoDTO.nomeProduto();
@@ -39,5 +40,13 @@ public class ProdutoEntity {
         this.dataValidade = produtoDTO.dataValidade();
         this.genero = produtoDTO.genero();
         this.lote = produtoDTO.lote();
+    }
+
+    public void desativar() {
+        this.ativo = false;
+    }
+
+    public void ativar() {
+        this.ativo = true;
     }
 }

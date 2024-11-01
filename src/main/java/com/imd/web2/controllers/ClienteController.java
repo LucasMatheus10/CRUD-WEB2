@@ -26,11 +26,19 @@ public class ClienteController {
         return ResponseEntity.ok().body(clienteRepository.findAll());
     }
 
+    @GetMapping("getAllByAtivo")
+    public ResponseEntity<Object> getAllByAtivo() {
+        return ResponseEntity.ok().body(clienteRepository.findAllByAtivoTrue());
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<Object> getById(@PathVariable Long id) {
         Optional<ClienteEntity> cliente = clienteRepository.findById(id);
         if(cliente.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não localizado");
+        }
+        if(!cliente.get().getAtivo()){
+            return ResponseEntity.status(HttpStatus.LOCKED).body("Cliente não está ativo");
         }
         return ResponseEntity.ok().body(cliente.get());
     }
@@ -48,6 +56,10 @@ public class ClienteController {
 
         if (clienteBase.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado");
+        }
+
+        if (!clienteBase.get().getAtivo()) {
+            return ResponseEntity.status(HttpStatus.LOCKED).body("Cliente não está ativo");
         }
 
         if (clienteAtualizado.getCpf() != null && !clienteAtualizado.getCpf().equals(clienteBase.get().getCpf())) {
@@ -76,4 +88,16 @@ public class ClienteController {
         }
     }
 
+    @PutMapping("deleteLogic/{id}")
+    public ResponseEntity<Object> deleteLogic(@PathVariable Long id) {
+        Optional<ClienteEntity> cliente;
+        if (clienteRepository.existsById(id)) {
+            cliente = clienteRepository.findById(id);
+            cliente.get().desativar();
+            clienteRepository.save(cliente.get());
+            return ResponseEntity.ok().body(cliente.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não localizado");
+        }
+    }
 }
