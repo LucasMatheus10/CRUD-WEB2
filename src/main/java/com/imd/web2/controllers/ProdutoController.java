@@ -3,6 +3,7 @@ package com.imd.web2.controllers;
 import com.imd.web2.entities.DTO.ProdutoDTO;
 import com.imd.web2.entities.ProdutoEntity;
 import com.imd.web2.repositories.ProdutoRepository;
+import com.imd.web2.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,91 +20,59 @@ public class ProdutoController {
     }
 
     @Autowired
-    ProdutoRepository produtoRepository;
+    ProdutoService produtoService;
 
     @GetMapping("getAll")
     public ResponseEntity<Object> getAllprodutos() {
-        return ResponseEntity.ok().body(produtoRepository.findAll());
+        return ResponseEntity.ok().body(produtoService.getAllprodutos());
     }
 
     @GetMapping("getAllByAtivo")
     public ResponseEntity<Object> getAllByAtivo() {
-        return ResponseEntity.ok().body(produtoRepository.findAllByAtivoTrue());
+        return ResponseEntity.ok().body(produtoService.getAllByAtivo());
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Object> getById(@PathVariable Long id) {
-        Optional<ProdutoEntity> produto = produtoRepository.findById(id);
-        if(produto.isEmpty()){
+        var produto = produtoService.getById(id);
+        if(produto == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não localizado");
         }
-        if(!produto.get().getAtivo()){
-            return ResponseEntity.status(HttpStatus.LOCKED).body("Produto não está ativo");
-        }
-        return ResponseEntity.ok().body(produto.get());
+        return ResponseEntity.ok().body(produto);
     }
 
     @PostMapping()
-    public ResponseEntity<Object> postClient(@RequestBody ProdutoDTO produtoDTO) {
-        ProdutoEntity produto = new ProdutoEntity(produtoDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(produtoRepository.save(produto));
+    public ResponseEntity<Object> postProduto(@RequestBody ProdutoDTO produtoDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.postProduto(produtoDTO));
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Object> putClient(@PathVariable Long id, @RequestBody ProdutoDTO produtoDTO) {
-        ProdutoEntity produtoAtualizado = new ProdutoEntity(produtoDTO);
-        Optional<ProdutoEntity> produtoBase = produtoRepository.findById(id);
-
-        if (produtoBase.isEmpty()) {
+    public ResponseEntity<Object> putProduto(@PathVariable Long id, @RequestBody ProdutoDTO produtoDTO) {
+        var produto = produtoService.putProduto(id, produtoDTO);
+        if (produto == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
         }
-
-        if (!produtoBase.get().getAtivo()) {
-            return ResponseEntity.status(HttpStatus.LOCKED).body("Produto não está ativo");
-        }
-
-        if (produtoAtualizado.getLote() != null && !produtoAtualizado.getLote().equals(produtoBase.get().getLote())) {
-            produtoBase.get().setLote(produtoAtualizado.getLote());
-        }
-        if (produtoAtualizado.getNomeProduto() != null && !produtoAtualizado.getNomeProduto().equals(produtoBase.get().getNomeProduto())) {
-            produtoBase.get().setNomeProduto(produtoAtualizado.getNomeProduto());
-        }
-        if (produtoAtualizado.getGenero() != null && produtoAtualizado.getGenero() != produtoBase.get().getGenero()) {
-            produtoBase.get().setGenero(produtoAtualizado.getGenero());
-        }
-        if (produtoAtualizado.getDataFabricacao() != null && !produtoAtualizado.getDataFabricacao().equals(produtoBase.get().getDataFabricacao())) {
-            produtoBase.get().setDataFabricacao(produtoAtualizado.getDataFabricacao());
-        }
-        if (produtoAtualizado.getDataValidade() != null && !produtoAtualizado.getDataValidade().equals(produtoBase.get().getDataValidade())) {
-            produtoBase.get().setDataValidade(produtoAtualizado.getDataValidade());
-        }
-        if (produtoAtualizado.getMarca() != null && !produtoAtualizado.getMarca().equals(produtoBase.get().getMarca())) {
-            produtoBase.get().setMarca(produtoAtualizado.getMarca());
-        }
-
-        produtoRepository.save(produtoBase.get());
-        return ResponseEntity.ok().body(produtoBase.get());
+        return ResponseEntity.ok().body(produto);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Object> deleteClient(@PathVariable Long id) {
-        if (produtoRepository.existsById(id)) {
-            produtoRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } else {
+    public ResponseEntity<Object> deleteProduto(@PathVariable Long id) {
+        var produto = produtoService.deleteProduto(id);
+        if (produto) {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não localizado");
         }
     }
 
     @PutMapping("deleteLogic/{id}")
     public ResponseEntity<Object> deleteLogic(@PathVariable Long id) {
-        Optional<ProdutoEntity> produto;
-        if (produtoRepository.existsById(id)) {
-            produto = produtoRepository.findById(id);
-            produto.get().desativar();
-            produtoRepository.save(produto.get());
-            return ResponseEntity.ok().body(produto.get());
-        } else {
+        var produto = produtoService.deleteLogic(id);
+        if (produto) {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não localizado");
         }
     }
