@@ -1,6 +1,6 @@
 package com.imd.web2.entities;
 
-import com.imd.web2.DTO.ClienteDTO;
+import com.imd.web2.entities.DTO.ClienteDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

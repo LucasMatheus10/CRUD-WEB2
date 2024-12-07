@@ -1,4 +1,4 @@
-package com.imd.web2.DTO;
+package com.imd.web2.entities.DTO;
 
 import com.imd.web2.entities.ClienteEntity;
 

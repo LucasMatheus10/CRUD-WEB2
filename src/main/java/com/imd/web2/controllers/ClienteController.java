@@ -1,6 +1,6 @@
 package com.imd.web2.controllers;
 
-import com.imd.web2.DTO.ClienteDTO;
+import com.imd.web2.entities.DTO.ClienteDTO;
 import com.imd.web2.entities.ClienteEntity;
 import com.imd.web2.repositories.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
