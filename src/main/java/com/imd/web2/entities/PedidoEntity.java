@@ -2,11 +2,15 @@ package com.imd.web2.entities;
 
 import com.imd.web2.entities.DTO.ClienteDTO;
 import com.imd.web2.entities.DTO.PedidoDTO;
+import com.imd.web2.repositories.PedidoRepository;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jdbc.core.JdbcAggregateOperations;
+
 import java.util.List;
 
 @Entity
@@ -35,7 +39,6 @@ public class PedidoEntity {
 
     public PedidoEntity(PedidoDTO pedidoDTO){
         this.codigo = pedidoDTO.codigo();
-        this.cliente = pedidoDTO.cliente();
     }
 
     public void carregarDTO(PedidoDTO pedido){

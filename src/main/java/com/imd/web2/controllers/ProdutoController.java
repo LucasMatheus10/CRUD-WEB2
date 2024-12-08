@@ -39,8 +39,8 @@ public class ProdutoController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Object> putProduto(@PathVariable Long id, @RequestBody ProdutoDTO produtoDTO) {
-        var produto = produtoService.putProduto(id, produtoDTO);
+    public ResponseEntity<Object> updateProduto(@PathVariable Long id, @RequestBody ProdutoDTO produtoDTO) {
+        var produto = produtoService.updateProduto(id, produtoDTO);
         if (produto == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
         }

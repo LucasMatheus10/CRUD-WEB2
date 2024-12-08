@@ -39,8 +39,8 @@ public class ClienteController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Object> putClient(@PathVariable Long id, @RequestBody ClienteDTO clienteDTO) {
-        var cliente = clienteService.putClient(id, clienteDTO);
+    public ResponseEntity<Object> updateClient(@PathVariable Long id, @RequestBody ClienteDTO clienteDTO) {
+        var cliente = clienteService.updateClient(id, clienteDTO);
         if (cliente == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado");
         }

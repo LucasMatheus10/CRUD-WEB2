@@ -38,7 +38,7 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
 
-    public ProdutoEntity putProduto(Long id, ProdutoDTO produtoDTO) {
+    public ProdutoEntity updateProduto(Long id, ProdutoDTO produtoDTO) {
         Optional<ProdutoEntity> produto = produtoRepository.findById(id);
         if (produto.isEmpty()) {
             return null;

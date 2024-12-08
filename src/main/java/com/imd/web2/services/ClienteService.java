@@ -38,7 +38,7 @@ public class ClienteService {
         return clienteRepository.save(cliente);
     }
 
-    public ClienteEntity putClient(Long id, ClienteDTO clienteDTO) {
+    public ClienteEntity updateClient(Long id, ClienteDTO clienteDTO) {
         Optional<ClienteEntity> cliente = clienteRepository.findById(id);
         if (cliente.isEmpty()) {
             return null;

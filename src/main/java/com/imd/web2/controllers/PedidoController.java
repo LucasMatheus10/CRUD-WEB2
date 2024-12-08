@@ -39,9 +39,14 @@ public class PedidoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(pedidoService.postPedido(pedidoDTO));
     }
 
+    @PutMapping("putClient/{idPedido}/{idCliente}")
+    public ResponseEntity<Object> putClient(@PathVariable Long idPedido, @PathVariable Long idCliente) {
+        return ResponseEntity.ok().body(pedidoService.putClient(idPedido, idCliente));
+    }
+
     @PutMapping("{id}")
-    public ResponseEntity<Object> putPedido(@PathVariable Long id, @RequestBody PedidoDTO pedidoDTO) {
-        var pedido = pedidoService.putPedido(id, pedidoDTO);
+    public ResponseEntity<Object> updatePedido(@PathVariable Long id, @RequestBody PedidoDTO pedidoDTO) {
+        var pedido = pedidoService.updatePedido(id, pedidoDTO);
         if (pedido == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pedido não encontrado");
         }
@@ -68,14 +73,14 @@ public class PedidoController {
         }
     }
 
-    @PostMapping("addProduct/{id}")
-    public ResponseEntity<Object> addProduct(@PathVariable Long id, @RequestBody ProdutoDTO produto) {
-        return ResponseEntity.ok().body(pedidoService.addProduct(id, produto));
+    @PostMapping("addProduct/{idPedido}/{idProduto}")
+    public ResponseEntity<Object> addProduct(@PathVariable Long idPedido, @PathVariable Long idProduto) {
+        return ResponseEntity.ok().body(pedidoService.addProduct(idPedido, idProduto));
     }
 
-    @DeleteMapping("removeProduct/{id}")
-    public ResponseEntity<Object> removeProduct(@PathVariable Long id, @RequestBody ProdutoDTO produto) {
-        return ResponseEntity.ok().body(pedidoService.removeProduct(id, produto));
+    @DeleteMapping("removeProduct/{idPedido}/{idProduto}")
+    public ResponseEntity<Object> removeProduct(@PathVariable Long idPedido, @PathVariable Long idProduto) {
+        return ResponseEntity.ok().body(pedidoService.removeProduct(idPedido, idProduto));
     }
 
 }

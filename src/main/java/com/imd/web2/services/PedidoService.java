@@ -5,6 +5,7 @@ import com.imd.web2.entities.DTO.PedidoDTO;
 import com.imd.web2.entities.DTO.ProdutoDTO;
 import com.imd.web2.entities.PedidoEntity;
 import com.imd.web2.entities.ProdutoEntity;
+import com.imd.web2.repositories.ClienteRepository;
 import com.imd.web2.repositories.PedidoRepository;
 import com.imd.web2.repositories.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class PedidoService {
     PedidoRepository pedidoRepository;
     @Autowired
     private ProdutoRepository produtoRepository;
+    @Autowired
+    private ClienteRepository clienteRepository;
 
     public List<PedidoEntity> getAll() {
         return pedidoRepository.findAll();
@@ -41,7 +44,18 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    public PedidoEntity putPedido(Long id, PedidoDTO pedidoDTO) {
+    public PedidoEntity putClient(Long id, Long idCliente) {
+        Optional<PedidoEntity> pedido = pedidoRepository.findById(id);
+        Optional<ClienteEntity> cliente = clienteRepository.findById(idCliente);
+        if (pedido.isEmpty() || cliente.isEmpty()) {
+            return null;
+        }
+        pedido.get().setCliente(cliente.get());
+        pedidoRepository.save(pedido.get());
+        return pedido.get();
+    }
+
+    public PedidoEntity updatePedido(Long id, PedidoDTO pedidoDTO) {
         Optional<PedidoEntity> pedido = pedidoRepository.findById(id);
         if (pedido.isEmpty()) {
             return null;
@@ -71,24 +85,24 @@ public class PedidoService {
         }
     }
 
-    public List<ProdutoEntity> addProduct (Long id, ProdutoDTO produtoDTO) {
-        Optional<PedidoEntity> pedido = pedidoRepository.findById(id);
-        ProdutoEntity produto = new ProdutoEntity(produtoDTO);
+    public List<ProdutoEntity> addProduct (Long idPedido, Long idProduto) {
+        Optional<PedidoEntity> pedido = pedidoRepository.findById(idPedido);
+        Optional<ProdutoEntity> produto = produtoRepository.findById(idProduto);
         if (pedido.isEmpty()) {
             return null;
         }
-        pedido.get().getProdutos().add(produto);
+        pedido.get().getProdutos().add(produto.get());
         pedidoRepository.save(pedido.get());
         return pedido.get().getProdutos();
     }
 
-    public List<ProdutoEntity> removeProduct (Long id, ProdutoDTO produtoDTO) {
-        Optional<PedidoEntity> pedido = pedidoRepository.findById(id);
-        ProdutoEntity produto = new ProdutoEntity(produtoDTO);
+    public List<ProdutoEntity> removeProduct (Long idPedido, Long idProduto) {
+        Optional<PedidoEntity> pedido = pedidoRepository.findById(idPedido);
+        Optional<ProdutoEntity> produto = produtoRepository.findById(idProduto);
         if (pedido.isEmpty()) {
             return null;
         }
-        pedido.get().getProdutos().remove(produto);
+        pedido.get().getProdutos().remove(produto.get());
         pedidoRepository.save(pedido.get());
         return pedido.get().getProdutos();
     }
