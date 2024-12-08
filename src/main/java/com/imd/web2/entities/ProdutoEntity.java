@@ -20,7 +20,6 @@ public class ProdutoEntity {
     String marca;
     String dataFabricacao;
     String dataValidade;
-
     public enum Genero {
         COSMETICO,
         ALIMENTICIO,
@@ -28,7 +27,6 @@ public class ProdutoEntity {
         PESSOAL,
         LIMPEZA,
     }
-
     Genero genero;
     String lote;
     Boolean ativo = true;
@@ -40,6 +38,27 @@ public class ProdutoEntity {
         this.dataValidade = produtoDTO.dataValidade();
         this.genero = produtoDTO.genero();
         this.lote = produtoDTO.lote();
+    }
+
+    public void carregarDTO(ProdutoDTO produto){
+        if(produto.nomeProduto() != null){
+            this.nomeProduto = produto.nomeProduto();
+        }
+        if(produto.marca() != null){
+            this.marca = produto.marca();
+        }
+        if(produto.dataFabricacao() != null){
+            this.dataFabricacao = produto.dataFabricacao();
+        }
+        if(produto.dataValidade() != null){
+            this.dataValidade = produto.dataValidade();
+        }
+        if(produto.genero() != null){
+            this.genero = produto.genero();
+        }
+        if(produto.lote() != null){
+            this.lote = produto.lote();
+        }
     }
 
     public void desativar() {

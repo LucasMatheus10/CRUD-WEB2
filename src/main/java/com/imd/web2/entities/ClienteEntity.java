@@ -34,6 +34,21 @@ public class ClienteEntity {
         this.dataNascimento = clienteDTO.dataNascimento();
     }
 
+    public void carregarDTO(ClienteDTO cliente){
+        if(cliente.nome() != null){
+            this.nome = cliente.nome();
+        }
+        if(cliente.cpf() != null){
+            this.cpf = cliente.cpf();
+        }
+        if(cliente.genero() != null){
+            this.genero = cliente.genero();
+        }
+        if(cliente.dataNascimento() != null){
+            this.dataNascimento = cliente.dataNascimento();
+        }
+    }
+
     public void desativar() {
         this.ativo = false;
     }

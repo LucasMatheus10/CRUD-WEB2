@@ -1,23 +1,15 @@
 package com.imd.web2.controllers;
 
 import com.imd.web2.entities.DTO.ClienteDTO;
-import com.imd.web2.entities.ClienteEntity;
-import com.imd.web2.repositories.ClienteRepository;
 import com.imd.web2.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cliente")
 public class ClienteController {
-
-    @GetMapping
-    public String olaCliente() {
-        return "Ola Cliente";
-    }
 
     @Autowired
     ClienteService clienteService;

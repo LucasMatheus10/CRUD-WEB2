@@ -1,5 +1,6 @@
 package com.imd.web2.entities;
 
+import com.imd.web2.entities.DTO.ClienteDTO;
 import com.imd.web2.entities.DTO.PedidoDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,15 +21,27 @@ public class PedidoEntity {
     Long id;
     String codigo;
     @ManyToMany
+    @JoinTable(
+        name = "pedido_produto",
+        joinColumns = @JoinColumn(name = "pedido_id"),
+        inverseJoinColumns = @JoinColumn(name = "produto_id")
+    )
     List<ProdutoEntity> produtos;
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     ClienteEntity cliente;
     Boolean ativo = true;
 
-    public void PedidoEntity(PedidoDTO pedidoDTO){
+
+    public PedidoEntity(PedidoDTO pedidoDTO){
         this.codigo = pedidoDTO.codigo();
         this.cliente = pedidoDTO.cliente();
+    }
+
+    public void carregarDTO(PedidoDTO pedido){
+        if(pedido.codigo() != null){
+            this.codigo = pedido.codigo();
+        }
     }
 
     public ClienteEntity getCliente() {
