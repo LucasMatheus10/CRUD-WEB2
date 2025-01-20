@@ -73,7 +73,7 @@ public class PedidoController {
         }
     }
 
-    @PostMapping("addProduct/{idPedido}/{idProduto}")
+    @PutMapping("addProduct/{idPedido}/{idProduto}")
     public ResponseEntity<Object> addProduct(@PathVariable Long idPedido, @PathVariable Long idProduto) {
         return ResponseEntity.ok().body(pedidoService.addProduct(idPedido, idProduto));
     }
